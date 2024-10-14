@@ -10,4 +10,3 @@ EXPOSE 2020
 ENV PYTHONUNBUFFERED=1
 
 COPY ./ ./
-CMD ["python", "main.py"]
