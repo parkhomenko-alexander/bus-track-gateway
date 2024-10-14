@@ -53,11 +53,11 @@ def handle_wialon_message(message):
         case "#D":
             print(f"Data message: {message}")
             extract_data_fields(message)
-            response_body = "#AD#1\r\n"
+            response_body = "#AD#1"
         case _:
             print("ERROR")
     response = response_body + response_end
-    print(f"Reposense:{response.encode()}\n\n")
+    print(f"Reposense:{response}\n\n")
     return response
 
 
@@ -78,7 +78,7 @@ def handle_client_connection(client_socket):
             response = handle_wialon_message(message.decode())
             
             # Send an acknowledgment or response back to the client
-            client_socket.send(response)
+            client_socket.send(response.encode())
         else:
             print("Small buffer")
             
