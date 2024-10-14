@@ -19,25 +19,46 @@ def handle_wialon_message(message):
 # Function to handle client connection
 def handle_client_connection(client_socket):
     try:
+        buffer_size = 8192  # Increase the buffer size to a larger value, e.g., 8192 bytes
+        data = b''  # Use this to accumulate data
+        
         while True:
-            # Receive the data from the client (GPS tracker)
-            message = client_socket.recv(1024)
+            # Receive data from the client
+            chunk = client_socket.recv(buffer_size)
             
-            if not message:
+            if not chunk:
                 print("Connection closed by client")
                 break
             
-            print(f"Received data: {message}")
+            # Append the received chunk to the data buffer
+            data += chunk
             
-            # Handle the incoming Wialon IPS message
-            response = handle_wialon_message(message.decode())
+            print(f"Received chunk: {chunk}")
             
-            # Send an acknowledgment or response back to the device
-            client_socket.send(response.encode())
+            # Check if the message ends with the delimiter (e.g., '\r\n')
+            if b'\r\n' in data:
+                # Split the data at the delimiter to process the message
+                messages = data.split(b'\r\n')
+                
+                # Process each complete message (before the last delimiter)
+                for message in messages[:-1]:
+                    decoded_message = message.decode()
+                    print(f"Complete message: {decoded_message}")
+                    
+                    # Handle the message (Wialon, in this case)
+                    response = handle_wialon_message(decoded_message)
+                    
+                    # Send an acknowledgment or response back to the client
+                    client_socket.send(response.encode())
+                
+                # Keep any data after the last delimiter in the buffer (in case of additional messages)
+                data = messages[-1]  # Reset data to the remaining incomplete part (if any)
+                
     except Exception as e:
         print(f"Error handling client: {e}")
     finally:
         client_socket.close()
+
 
 # Main server function
 def start_server(host='0.0.0.0', port=2020):
