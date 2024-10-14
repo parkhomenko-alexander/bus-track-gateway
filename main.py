@@ -91,13 +91,11 @@ def start_server(host='0.0.0.0', port=2020):
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.bind((host, port))
     server.listen(5)  # Listen for up to 5 simultaneous connections
-    print(f"Server started on {host}:{port}")
+    print(f"Server started on {host}:{port}\n")
     
     while True:
         client_socket, addr = server.accept()
         print(f"Accepted connection from {addr}")
-        
-        # Handle client connection in a separate thread
         client_handler = threading.Thread(target=handle_client_connection, args=(client_socket,))
         client_handler.start()
 
