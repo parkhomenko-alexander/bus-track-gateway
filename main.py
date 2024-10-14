@@ -45,6 +45,7 @@ def extract_data_fields(message):
 def handle_wialon_message(message):
     response = ""
     print(f"Message start with: {message[:10]}")
+    print()
     match message[:2]:
         case "#L":
             print(f"Login message: {message}")
@@ -73,7 +74,7 @@ def handle_client_connection(client_socket):
             message = data.split(b'\r\n')[0]
             
            
-            response = handle_wialon_message(message)
+            response = handle_wialon_message(message.decode())
             
             # Send an acknowledgment or response back to the client
             client_socket.send(response.encode())
