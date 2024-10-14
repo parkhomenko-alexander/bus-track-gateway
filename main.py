@@ -43,18 +43,20 @@ def extract_data_fields(message):
 
 
 def handle_wialon_message(message):
-    response = ""
+    response_end = "\r\n"
+    response_body = ""
     print(f"Message start with: {message[:10]}")
     match message[:2]:
         case "#L":
             print(f"Login message: {message}")
-            response = "#AL#1\\r\\n"
+            response_body = "#AL#1"
         case "#D":
             print(f"Data message: {message}")
             extract_data_fields(message)
-            response = "#AD#1\\r\\n"
+            response_body = "#AD#1\r\n"
         case _:
             print("ERROR")
+    response = response_body + response_end
     print(f"Reposense:{response.encode()}\n\n")
     return response
 
