@@ -55,7 +55,7 @@ def handle_wialon_message(message):
             response = "#AD#1\r\n"
         case _:
             print("ERROR")
-    print("\n\n")
+    print(f"Reposense:{response}\n\n")
     return response
 
 
