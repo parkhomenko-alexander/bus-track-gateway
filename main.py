@@ -10,7 +10,10 @@ def handle_wialon_message(message):
     print(f"Received message: {message}")
     
     # Simulate response message (you would craft a proper response here)
-    response = "#ACK;"
+    if "#L#" in message:
+        response = "#AL#1\r\n"
+    else:
+        response = "#ACK;"
     return response
 
 # Function to handle client connection

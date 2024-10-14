@@ -121,3 +121,5 @@ app/celery/celerybeat-schedule.dir
 
 
 reports/*
+
+test.py
