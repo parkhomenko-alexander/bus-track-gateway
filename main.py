@@ -51,12 +51,13 @@ def handle_wialon_message(message):
             response_body = "#AL#1"
         case "D":
             print(f"Data message: {message}")
-            extract_data_fields(message)
+            exd = extract_data_fields(message)
+            print(exd)
             response_body = "#AD#1"
         case _:
             print("ERROR")
     response = response_body + response_end
-    print(f"Reposense:{response.encode()}\n\n")
+    print(f"Response:{response.encode()}\n\n")
     return response
 
 
