@@ -45,21 +45,28 @@ def extract_data_fields(message):
 def handle_wialon_message(message):
     # response_end = "\r\n"
     # response_body = ""
-    print(message[:3])
-    match message[:3]:
-        case "#L#":
-            print(f"Login message: {message}")
-            response_body = "#AL#1\r\n"
-        case "#D#":
-            print(f"Data message: {message}")
-            exd = extract_data_fields(message)
-            print(exd)
-            response_body = "#AD#1\r\n"
-        case _:
-            print("ERROR")
-            response_body = "#ERROR#1\r\n"
+    # print(message[:3])
+    # match message[:3]:
+    #     case "#L#":
+    #         print(f"Login message: {message}")
+    #         response_body = "#AL#1\r\n"
+    #     case "#D#":
+    #         print(f"Data message: {message}")
+    #         exd = extract_data_fields(message)
+    #         print(exd)
+    #         response_body = "#AD#1\r\n"
+    #     case _:
+    #         print("ERROR")
+    #         response_body = "#ERROR#1\r\n"
 
-    return response_body
+    # return response_body
+
+    # Here, you would parse the binary or string data according to Wialon specs
+    print(f"Received message: {message}")
+    
+    # Simulate response message (you would craft a proper response here)
+    response = "#AL#1\r\n"
+    return response
 
 
 def handle_client_connection(client_socket):
