@@ -48,17 +48,17 @@ def handle_wialon_message(message):
     match message[1:2]:
         case "L":
             print(f"Login message: {message}")
-            response_body = "#AL#1"
+            response_body = "#AL#1\r\n"
         case "D":
             print(f"Data message: {message}")
             exd = extract_data_fields(message)
             print(exd)
-            response_body = "#AD#1"
+            response_body = "#AD#1\r\n"
         case _:
             print("ERROR")
     response = response_body + response_end
-    print(f"Response:{response.encode()}\n\n")
-    return response
+    print(f"Response:{response}\n\n")
+    return response_body
 
 
 def handle_client_connection(client_socket):
