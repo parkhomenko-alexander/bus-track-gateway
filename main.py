@@ -51,11 +51,10 @@ def handle_wialon_message(message):
         case "#D":
             print(f"Data message: {message}")
             extract_data_fields(message)
-            print("\n\n")
             response = "#AD#1\r\n"
         case _:
             print("ERROR")
-        
+    print("\n\n")
     return response
 
 
@@ -102,6 +101,4 @@ def start_server(host='0.0.0.0', port=2020):
         client_handler.start()
 
 if __name__ == "__main__":
-    print("hello work")
-    # Start the Wialon server
     start_server(port=2020)
