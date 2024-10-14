@@ -76,8 +76,6 @@ def handle_client_connection(client_socket):
             
            
             response = handle_wialon_message(message.decode())
-            type_r = type(response)
-            print(type_r, response.encode())
             client_socket.send(response.encode())
         else:
             print("Small buffer")
