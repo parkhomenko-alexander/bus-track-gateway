@@ -42,91 +42,27 @@ def extract_data_fields(message):
     
 
 
-# def handle_wialon_message(message):
-#     # response_end = "\r\n"
-#     # response_body = ""
-#     # print(message[:3])
-#     # match message[:3]:
-#     #     case "#L#":
-#     #         print(f"Login message: {message}")
-#     #         response_body = "#AL#1\r\n"
-#     #     case "#D#":
-#     #         print(f"Data message: {message}")
-#     #         exd = extract_data_fields(message)
-#     #         print(exd)
-#     #         response_body = "#AD#1\r\n"
-#     #     case _:
-#     #         print("ERROR")
-#     #         response_body = "#ERROR#1\r\n"
-
-#     # return response_body
-
-#     # Here, you would parse the binary or string data according to Wialon specs
-#     print(f"Received message: {message}")
-    
-#     # Simulate response message (you would craft a proper response here)
-#     response = "#AL#1\r\n"
-#     return response
-
-
-# def handle_client_connection(client_socket):
-#     try:
-#         buffer_size = 1024  # Increase the buffer size to a larger value, e.g., 8192 bytes
-
-#         data = client_socket.recv(buffer_size)
-
-#         print(f"Raw message: {data}")
-        
-#         # Check if the message ends with the delimiter (e.g., '\r\n')
-#         if b'\r\n' in data:
-#             # Split the data at the delimiter to process the message
-#             # message = data.split(b'\r\n')[0]
-            
-           
-#             response = handle_wialon_message(data.decode())
-#             client_socket.send(response.encode())
-#         else:
-#             print("Small buffer")
-            
-#     except Exception as e:
-#         print(f"Error handling client: {e}")
-#     finally:
-#         client_socket.close()
-
-
-# # Main server function
-# def start_server(host='0.0.0.0', port=2020):
-#     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#     server.bind((host, port))
-#     server.listen(5)  # Listen for up to 5 simultaneous connections
-#     print(f"Server started on {host}:{port}\n")
-    
-#     while True:
-#         client_socket, addr = server.accept()
-#         print(f"Accepted connection from {addr}")
-#         client_handler = threading.Thread(target=handle_client_connection, args=(client_socket,))
-#         client_handler.start()
-
-# if __name__ == "__main__":
-#     start_server(port=2020)
-
-
-import datetime
-import socket
-import threading
-
-
-# Wialon Protocol Message Handler (example, parsing may vary depending on actual message format)
 def handle_wialon_message(message):
-    # Decode the message based on Wialon IPS protocol
-    # Here, you would parse the binary or string data according to Wialon specs
-    print(f"Received message: {message}")
-    
-    # Simulate response message (you would craft a proper response here)
-    response = "#AL#1\r\n"
-    return response
+    response_end = "\r\n"
+    response_body = ""
+    print(message[:3])
+    match message[:3]:
+        case "#L#":
+            print(f"Login message: {message}")
+            response_body = "#AL#1\r\n"
+        case "#D#":
+            print(f"Data message: {message}")
+            exd = extract_data_fields(message)
+            print(exd)
+            response_body = "#AD#1\r\n"
+        case _:
+            print("ERROR")
+            response_body = "#ERROR#1\r\n"
 
-# Function to handle client connection
+    return response_body
+
+
+
 def handle_client_connection(client_socket):
     try:
         while True:
@@ -144,26 +80,83 @@ def handle_client_connection(client_socket):
             
             # Send an acknowledgment or response back to the device
             client_socket.send(response.encode())
+            
     except Exception as e:
         print(f"Error handling client: {e}")
     finally:
         client_socket.close()
+
 
 # Main server function
 def start_server(host='0.0.0.0', port=2020):
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.bind((host, port))
     server.listen(5)  # Listen for up to 5 simultaneous connections
-    print(f"Server started on {host}:{port}")
+    print(f"Server started on {host}:{port}\n")
     
     while True:
         client_socket, addr = server.accept()
         print(f"Accepted connection from {addr}")
-        
-        # Handle client connection in a separate thread
         client_handler = threading.Thread(target=handle_client_connection, args=(client_socket,))
         client_handler.start()
 
 if __name__ == "__main__":
-    # Start the Wialon server
     start_server(port=2020)
+
+
+# import datetime
+# import socket
+# import threading
+
+
+# # Wialon Protocol Message Handler (example, parsing may vary depending on actual message format)
+# def handle_wialon_message(message):
+#     # Decode the message based on Wialon IPS protocol
+#     # Here, you would parse the binary or string data according to Wialon specs
+#     print(f"Received message: {message}")
+    
+#     # Simulate response message (you would craft a proper response here)
+#     response = "#AL#1\r\n"
+#     return response
+
+# # Function to handle client connection
+# def handle_client_connection(client_socket):
+#     try:
+#         while True:
+#             # Receive the data from the client (GPS tracker)
+#             message = client_socket.recv(8192)
+            
+#             if not message:
+#                 print("Connection closed by client")
+#                 break
+            
+#             print(f"Received data: {message}")
+            
+#             # Handle the incoming Wialon IPS message
+#             response = handle_wialon_message(message.decode())
+            
+#             # Send an acknowledgment or response back to the device
+#             client_socket.send(response.encode())
+#     except Exception as e:
+#         print(f"Error handling client: {e}")
+#     finally:
+#         client_socket.close()
+
+# # Main server function
+# def start_server(host='0.0.0.0', port=2020):
+#     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#     server.bind((host, port))
+#     server.listen(5)  # Listen for up to 5 simultaneous connections
+#     print(f"Server started on {host}:{port}")
+    
+#     while True:
+#         client_socket, addr = server.accept()
+#         print(f"Accepted connection from {addr}")
+        
+#         # Handle client connection in a separate thread
+#         client_handler = threading.Thread(target=handle_client_connection, args=(client_socket,))
+#         client_handler.start()
+
+# if __name__ == "__main__":
+#     # Start the Wialon server
+#     start_server(port=2020)
