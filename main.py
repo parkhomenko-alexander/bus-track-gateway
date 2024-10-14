@@ -64,7 +64,7 @@ def handle_wialon_message(message):
 
 def handle_client_connection(client_socket):
     try:
-        buffer_size = 8192  # Increase the buffer size to a larger value, e.g., 8192 bytes
+        buffer_size = 1024  # Increase the buffer size to a larger value, e.g., 8192 bytes
 
         data = client_socket.recv(buffer_size)
 
