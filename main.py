@@ -57,7 +57,7 @@ def handle_wialon_message(message):
         case _:
             print("ERROR")
     response = response_body + response_end
-    print(f"Reposense:{response}\n\n")
+    print(f"Reposense:{response.encode()}\n\n")
     return response
 
 
