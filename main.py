@@ -48,14 +48,14 @@ def handle_wialon_message(message):
     match message[:2]:
         case "#L":
             print(f"Login message: {message}")
-            response = "#AL#1\r\n"
+            response = "#AL#1\\r\\n"
         case "#D":
             print(f"Data message: {message}")
             extract_data_fields(message)
-            response = "#AD#1\r\n"
+            response = "#AD#1\\r\\n"
         case _:
             print("ERROR")
-    print(f"Reposense:{response}\n\n")
+    print(f"Reposense:{response.encode()}\n\n")
     return response
 
 
@@ -76,7 +76,7 @@ def handle_client_connection(client_socket):
             response = handle_wialon_message(message.decode())
             
             # Send an acknowledgment or response back to the client
-            client_socket.send(response.encode())
+            client_socket.send(response)
         else:
             print("Small buffer")
             
