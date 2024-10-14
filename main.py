@@ -57,7 +57,6 @@ def handle_wialon_message(message):
         case _:
             print("ERROR")
     response = response_body + response_end
-    print(f"Response:{response}")
     return response_body
 
 
