@@ -46,11 +46,11 @@ def handle_wialon_message(message):
     response_end = "\r\n"
     response_body = ""
     print(f"Message start with: {message[:10]}")
-    match message[:2]:
-        case "#L":
+    match message[1:2]:
+        case "L":
             print(f"Login message: {message}")
             response_body = "#AL#1"
-        case "#D":
+        case "D":
             print(f"Data message: {message}")
             extract_data_fields(message)
             response_body = "#AD#1"
