@@ -45,11 +45,12 @@ def extract_data_fields(message):
 def handle_wialon_message(message):
     # response_end = "\r\n"
     # response_body = ""
-    match message[1:2]:
-        case "L":
+    print(message[:3])
+    match message[:3]:
+        case "#L#":
             print(f"Login message: {message}")
             response_body = "#AL#1\r\n"
-        case "D":
+        case "#D#":
             print(f"Data message: {message}")
             exd = extract_data_fields(message)
             print(exd)
@@ -63,7 +64,7 @@ def handle_wialon_message(message):
 
 def handle_client_connection(client_socket):
     try:
-        buffer_size = 1024  # Increase the buffer size to a larger value, e.g., 8192 bytes
+        buffer_size = 8192  # Increase the buffer size to a larger value, e.g., 8192 bytes
 
         data = client_socket.recv(buffer_size)
 
@@ -123,7 +124,7 @@ if __name__ == "__main__":
 #     try:
 #         while True:
 #             # Receive the data from the client (GPS tracker)
-#             message = client_socket.recv(1024)
+#             message = client_socket.recv(8192)
             
 #             if not message:
 #                 print("Connection closed by client")
