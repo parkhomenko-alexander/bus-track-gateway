@@ -101,7 +101,7 @@ def handle_client_connection(client_socket):
     try:
         while True:
             # Receive the data from the client (GPS tracker)
-            message = client_socket.recv(1024)
+            message = client_socket.recv(12000)
             
             if not message:
                 print("Connection closed by client")
