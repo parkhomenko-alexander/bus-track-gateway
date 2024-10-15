@@ -1,3 +1,4 @@
+import datetime
 import socket
 import threading
 
@@ -38,6 +39,7 @@ def extract_data_fields(message):
     except IndexError:
         print("Error: Message does not contain enough fields.")
         return None
+    
 
 
 def handle_wialon_message(message):
@@ -54,42 +56,63 @@ def handle_wialon_message(message):
             response_body = "#AD#1\r\n"
             return response_body
         case _:
-            print(f"Data message: {message}")
-            response_body = "#AD#1\r\n"
+            print("ERROR")
+            response_body = "#ERROR#1\r\n"
 
     return response_body
 
-
+    
 def handle_client_connection(client_socket):
+    # try:
+    #     buffer_size = 1024
+    #     data = b""
+
+    #     while True:
+    #         print("Waiting to receive data...")
+    #         chunk = client_socket.recv(buffer_size)
+
+    #         # If the chunk is empty, the connection is closed
+    #         if not chunk:
+    #             print("Connection closed by client")
+    #             break
+    #         print(chunk)
+    #         # Accumulate the chunk of data
+    #         data += chunk
+
+    #         # Check if the message ends with the delimiter (e.g., '\r\n')
+    #         if b'\r\n' in data:
+    #             print(f"Complete message received: {data.decode()}")
+
+    #             # Process the message and send the response
+    #             response = handle_wialon_message(data.decode())
+    #             print(response)
+    #             client_socket.send(response.encode())
+
+    #             # Clear the buffer for future messages if needed
+    #             data = b''  # Reset the buffer for the next message
+    #             break  # Stop after processing the message
+
+    # except Exception as e:
+    #     print(f"Error handling client: {e}")
+    # finally:
+    #     client_socket.close()
+    
     try:
-        buffer_size = 1024
-        data = b""
-
         while True:
-            print("Waiting to receive data...")
-            chunk = client_socket.recv(buffer_size)
-
-            # If the chunk is empty, the connection is closed
-            if not chunk:
+            # Receive the data from the client (GPS tracker)
+            message = client_socket.recv(1024)
+            
+            if not message:
                 print("Connection closed by client")
                 break
-            print(chunk)
-            # Accumulate the chunk of data
-            data += chunk
-
-            # Check if the message ends with the delimiter (e.g., '\r\n')
-            if b'\r\n' in data:
-                print(f"Complete message received: {data.decode()}")
-
-                # Process the message and send the response
-                response = handle_wialon_message(data.decode())
-                print(response)
-                client_socket.send(response.encode())
-
-                # Clear the buffer for future messages if needed
-                data = b''  # Reset the buffer for the next message
-                break  # Stop after processing the message
-
+            
+            print(f"Received data: {message}")
+            
+            # Handle the incoming Wialon IPS message
+            response = handle_wialon_message(message.decode())
+            
+            # Send an acknowledgment or response back to the device
+            client_socket.send(response.encode())
     except Exception as e:
         print(f"Error handling client: {e}")
     finally:
