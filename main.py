@@ -63,61 +63,55 @@ def handle_wialon_message(message):
 
     
 def handle_client_connection(client_socket):
-    # try:
-    #     buffer_size = 1024
-    #     data = b""
-
-    #     while True:
-    #         print("Waiting to receive data...")
-    #         chunk = client_socket.recv(buffer_size)
-
-    #         # If the chunk is empty, the connection is closed
-    #         if not chunk:
-    #             print("Connection closed by client")
-    #             break
-    #         print(chunk)
-    #         # Accumulate the chunk of data
-    #         data += chunk
-    #         if b"#D#":
-    #             print("catch D")
-    #         # Check if the message ends with the delimiter (e.g., '\r\n')
-    #         if b'\r\n' in data:
-    #             print(f"Complete message received: {data.decode()}")
-
-    #             # Process the message and send the response
-    #             response = handle_wialon_message(data.decode())
-    #             print(response)
-    #             client_socket.send(response.encode())
-
-    #             # Clear the buffer for future messages if needed
-    #             data = b''  # Reset the buffer for the next message
-    #             break  # Stop after processing the message
-
-    # except Exception as e:
-    #     print(f"Error handling client: {e}")
-    # finally:
-    #     client_socket.close()
-    
     try:
+        buffer_size = 1024
+        data = b""
+        print("Waiting to receive data...")
+
         while True:
-            # Receive the data from the client (GPS tracker)
-            message = client_socket.recv(12000)
-            
-            if not message:
-                print("Connection closed by client")
-                break
-            
-            print(f"Received data: {message}")
-            
-            # Handle the incoming Wialon IPS message
-            response = handle_wialon_message(message.decode())
-            
-            # Send an acknowledgment or response back to the device
+            chunk = client_socket.recv(buffer_size)
+
+            # If the chunk is empty, the connection is closed
+            if chunk:
+                data += chunk
+                continue
+
+            print(f"Complete message received: {data.decode()}")
+
+            # Process the message and send the response
+            response = handle_wialon_message(data.decode())
+            print(response)
             client_socket.send(response.encode())
+
+            # Clear the buffer for future messages if needed
+            data = b''
+            break
+
     except Exception as e:
         print(f"Error handling client: {e}")
     finally:
         client_socket.close()
+    
+    # try:
+    #     while True:
+    #         # Receive the data from the client (GPS tracker)
+    #         message = client_socket.recv(12000)
+            
+    #         if not message:
+    #             print("Connection closed by client")
+    #             break
+            
+    #         print(f"Received data: {message}")
+            
+    #         # Handle the incoming Wialon IPS message
+    #         response = handle_wialon_message(message.decode())
+            
+    #         # Send an acknowledgment or response back to the device
+    #         client_socket.send(response.encode())
+    # except Exception as e:
+    #     print(f"Error handling client: {e}")
+    # finally:
+    #     client_socket.close()
 
 
 # Main server function
