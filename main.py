@@ -6,36 +6,31 @@ import traceback
 
 def extract_data_fields(message):
     message = message.strip()  
-    if message.startswith("#D#"):
-        message_content = message[3:-2]  # Remove the "#D#" prefix
-    else:
-        return None  # Not a valid #D# message
-
     # Split the message by semicolons
-    fields = message_content.split(';')
-    
-    # Extract the relevant fields
+    records = message.split('\r\n')
     try:
-        date = fields[0] if fields[0] != "NA" else None
-        time = fields[1] if fields[1] != "NA" else None
-        lat1 = fields[2] if fields[2] != "NA" else None
-        lat2 = fields[3] if fields[3] != "NA" else None
-        lon1 = fields[4] if fields[4] != "NA" else None
-        lon2 = fields[5] if fields[5] != "NA" else None
-        speed = fields[6] if fields[6] != "NA" else None
-        course = fields[7] if fields[7] != "NA" else None
-        
-        # Return extracted values
-        return {
-            "date": date,
-            "time": time,
-            "lat1": lat1,
-            "lat2": lat2,
-            "lon1": lon1,
-            "lon2": lon2,
-            "speed": speed,
-            "course": course
-        }
+        for record in records:
+            fields = record.split(";")
+            date = fields[0] if fields[0] != "NA" else None
+            time = fields[1] if fields[1] != "NA" else None
+            lat1 = fields[2] if fields[2] != "NA" else None
+            lat2 = fields[3] if fields[3] != "NA" else None
+            lon1 = fields[4] if fields[4] != "NA" else None
+            lon2 = fields[5] if fields[5] != "NA" else None
+            speed = fields[6] if fields[6] != "NA" else None
+            course = fields[7] if fields[7] != "NA" else None
+            
+            # Return extracted values
+            print({
+                "date": date,
+                "time": time,
+                "lat1": lat1,
+                "lat2": lat2,
+                "lon1": lon1,
+                "lon2": lon2,
+                "speed": speed,
+                "course": course
+            })
         
     except IndexError:
         print("Error: Message does not contain enough fields.")
@@ -84,6 +79,7 @@ def handle_client_connection(client_socket):
 
                 elif chunk[-2:] == b"\r\n" and len(chunk) <= buffer_size:
                     msg = b"".join(data)
+                    print(msg)
                     r = handle_wialon_message(msg)
                     client_socket.send(r.encode())
                 data = []
