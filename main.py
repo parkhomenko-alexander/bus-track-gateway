@@ -79,9 +79,10 @@ def handle_client_connection(client_socket):
             print(chunk)
             # Accumulate the chunk of data
             data += chunk
-
+            if b"#D#":
+                print("catch D")
             # Check if the message ends with the delimiter (e.g., '\r\n')
-            if '\r\n' in data:
+            if b'\r\n' in data:
                 print(f"Complete message received: {data.decode()}")
 
                 # Process the message and send the response
