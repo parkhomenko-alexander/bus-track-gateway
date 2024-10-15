@@ -47,9 +47,8 @@ def handle_wialon_message(message):
             response_body = "#AL#1\r\n"
             return response_body
         case b"#D#":
-            print(f"Data message: {message}")
+            print(f"Data message")
             exd = extract_data_fields(message)
-            print(exd)
             response_body = "#AD#1\r\n"
             return response_body
         case _:
