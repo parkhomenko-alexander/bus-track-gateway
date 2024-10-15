@@ -49,11 +49,13 @@ def handle_wialon_message(message):
         case "#L#":
             print(f"Login message: {message}")
             response_body = "#AL#1\r\n"
+            return response_body
         case "#D#":
             print(f"Data message: {message}")
             exd = extract_data_fields(message)
             print(exd)
             response_body = "#AD#1\r\n"
+            return response_body
         case _:
             print("ERROR")
             response_body = "#ERROR#1\r\n"
