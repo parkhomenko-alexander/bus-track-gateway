@@ -71,9 +71,9 @@ def handle_client_connection(client_socket):
             print("Waiting to receive data...")
             chunk = client_socket.recv(buffer_size)
 
-            if not chunk:
-                print("Connection closed by client")
-                break
+            # if not chunk:
+            #     print("Connection closed by client")
+            #     break
 
             data += chunk
 
@@ -121,7 +121,7 @@ if __name__ == "__main__":
 #     response = "#AL#1\r\n"
 #     return response
 
-# # Function to handle client connection
+# Function to handle client connection
 # def handle_client_connection(client_socket):
 #     try:
 #         while True:
