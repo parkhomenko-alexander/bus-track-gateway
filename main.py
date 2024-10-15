@@ -7,7 +7,7 @@ import traceback
 def extract_data_fields(message):
     message = message.strip()  
     # Split the message by semicolons
-    records = message.split('\r\n')
+    records = message.decode().split('\r\n')
     try:
         for record in records:
             fields = record.split(";")
