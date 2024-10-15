@@ -45,6 +45,7 @@ def extract_data_fields(message):
 
 def handle_wialon_message(message):
     response_body = ""
+    print(message)
     match message[:3]:
         case "#L#":
             print(f"Login message: {message}")
