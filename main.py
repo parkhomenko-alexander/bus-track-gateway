@@ -74,6 +74,7 @@ def handle_client_connection(client_socket):
             # If the chunk is empty, the connection is closed
             if chunk:
                 data += chunk
+                print(len(chunk))
                 continue
 
             print(f"Complete message received: {data.decode()}")
