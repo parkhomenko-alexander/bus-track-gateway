@@ -75,13 +75,17 @@ def handle_client_connection(client_socket):
             if chunk:
                 data += chunk
                 print(len(chunk))
+                if "#L#" in data:
+                    r = handle_wialon_message(data)
+                    client_socket.send(r.encode())
+                    data = b''
+                    continue
                 continue
 
             print(f"Complete message received: {data.decode()}")
 
             # Process the message and send the response
             response = handle_wialon_message(data.decode())
-            print(response)
             client_socket.send(response.encode())
 
             # Clear the buffer for future messages if needed
