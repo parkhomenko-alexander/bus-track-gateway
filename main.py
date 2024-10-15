@@ -71,7 +71,7 @@ def handle_client_connection(client_socket):
 
         while True:
             print("Waiting to receive data...")
-            chunk = client_socket.recv(buffer_size)
+            chunk = client_socket.recv(1024)
 
             # If the chunk is empty, the connection is closed
             if not chunk:
@@ -82,17 +82,17 @@ def handle_client_connection(client_socket):
             data += chunk
 
             # Check if the message ends with the delimiter (e.g., '\r\n')
-            # if b'\r\n' in data:
-            print(f"Complete message received: {data.decode()}")
+            if b'\r\n' in data:
+                print(f"Complete message received: {data.decode()}")
 
-            # Process the message and send the response
-            response = handle_wialon_message(data.decode())
-            print(response)
-            client_socket.send(response.encode())
+                # Process the message and send the response
+                response = handle_wialon_message(data.decode())
+                print(response)
+                client_socket.send(response.encode())
 
-            # Clear the buffer for future messages if needed
-            data = b''  # Reset the buffer for the next message
-            break  # Stop after processing the message
+                # Clear the buffer for future messages if needed
+                data = b''  # Reset the buffer for the next message
+                break  # Stop after processing the message
 
     except Exception as e:
         print(f"Error handling client: {e}")
