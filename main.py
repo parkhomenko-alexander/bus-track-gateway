@@ -76,23 +76,16 @@ def handle_client_connection(client_socket):
                     msg = b"".join(data)
                     r = handle_wialon_message(msg)
                     client_socket.send(r.encode())
+                    data = []
 
                 elif chunk[-2:] == b"\r\n" and len(chunk) <= buffer_size:
                     msg = b"".join(data)
                     print(msg)
                     r = handle_wialon_message(msg)
                     client_socket.send(r.encode())
-                data = []
+                    data = []
                 continue
-
-
-            msg = b"".join(data)
-            print(f"Complete message received: {msg}")
-            response = handle_wialon_message(msg)
-            client_socket.send(response.encode())
-
-            data = []
-            break
+            # break
 
     except Exception as e:
         print(f"Error handling client: {e}")
