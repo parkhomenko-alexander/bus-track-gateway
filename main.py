@@ -9,7 +9,7 @@ def extract_data_fields(message):
     # Split the message by semicolons
     records = message.decode().split('\r\n')
     try:
-        for record in records:
+        for record in records[-2:]:
             fields = record.split(";")
             date = fields[0] if fields[0] != "NA" else None
             time = fields[1] if fields[1] != "NA" else None
