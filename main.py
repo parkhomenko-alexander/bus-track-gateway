@@ -101,7 +101,7 @@ def handle_client_connection(client_socket):
             if not chunk:
                 print("Connection closed by client")
                 break
-
+            print(chunk)
             # Accumulate the chunk of data
             data += chunk
 
