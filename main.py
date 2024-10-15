@@ -80,7 +80,6 @@ def handle_client_connection(client_socket):
 
                 elif chunk[-2:] == b"\r\n" and len(chunk) <= buffer_size:
                     msg = b"".join(data)
-                    print(msg)
                     r = handle_wialon_message(msg)
                     client_socket.send(r.encode())
                     data = []
