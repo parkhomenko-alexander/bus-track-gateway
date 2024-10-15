@@ -66,7 +66,7 @@ def handle_wialon_message(message):
 def handle_client_connection(client_socket):
     try:
         buffer_size = 1024
-        data = b""
+        data = []
         print("Waiting to receive data...")
 
         while True:
@@ -74,23 +74,24 @@ def handle_client_connection(client_socket):
 
             # If the chunk is empty, the connection is closed
             if chunk:
-                data += chunk
+                data.append(chunk)
                 print(len(chunk))
                 if b"#L#" in data:
-                    r = handle_wialon_message(data.decode())
+                    msg = "".join(data)
+                    r = handle_wialon_message(msg)
                     client_socket.send(r.encode())
-                    data = b''
+                    data = []
                     continue
                 continue
+            else:
+                print("NO CHUNCK")
 
-            print(f"Complete message received: {data.decode()}")
-
-            # Process the message and send the response
-            response = handle_wialon_message(data.decode())
+            msg = "".join(data)
+            print(f"Complete message received: {msg}")
+            response = handle_wialon_message(msg)
             client_socket.send(response.encode())
 
-            # Clear the buffer for future messages if needed
-            data = b''
+            data = []
             break
 
     except Exception as e:
