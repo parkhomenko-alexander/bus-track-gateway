@@ -76,13 +76,13 @@ def handle_client_connection(client_socket):
             # If the chunk is empty, the connection is closed
             if chunk:
                 data.append(chunk)
-                print(len(chunk), chunk[-4:])
+                print(len(chunk), chunk[-2:])
                 if b"#L#" in chunk:
                     msg = b"".join(data)
                     r = handle_wialon_message(msg)
                     client_socket.send(r.encode())
 
-                elif chunk[-4:] == b"\r\n" and len(chunk) <= buffer_size:
+                elif chunk[-2:] == b"\r\n" and len(chunk) <= buffer_size:
                     msg = b"".join(data)
                     r = handle_wialon_message(msg)
                     client_socket.send(r.encode())
