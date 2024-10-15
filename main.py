@@ -65,35 +65,56 @@ def handle_wialon_message(message):
 
 
 def handle_client_connection(client_socket):
+    # try:
+    #     buffer_size = 1024
+    #     data = b''
+
+    #     while True:
+    #         print("Waiting to receive data...")
+    #         chunk = client_socket.recv(buffer_size)
+
+    #         # If the chunk is empty, the connection is closed
+    #         if not chunk:
+    #             print("Connection closed by client")
+    #             break
+
+    #         # Accumulate the chunk of data
+    #         data += chunk
+
+    #         # Check if the message ends with the delimiter (e.g., '\r\n')
+    #         if b'\r\n' in data:
+    #             print(f"Complete message received: {data.decode()}")
+
+    #             # Process the message and send the response
+    #             response = handle_wialon_message(data.decode())
+    #             print(response)
+    #             client_socket.send(response.encode())
+
+    #             # Clear the buffer for future messages if needed
+    #             data = b''  # Reset the buffer for the next message
+    #             break  # Stop after processing the message
+
+    # except Exception as e:
+    #     print(f"Error handling client: {e}")
+    # finally:
+    #     client_socket.close()
+    
     try:
-        buffer_size = 1024
-        data = b''
-
         while True:
-            print("Waiting to receive data...")
-            chunk = client_socket.recv(buffer_size)
-
-            # If the chunk is empty, the connection is closed
-            if not chunk:
+            # Receive the data from the client (GPS tracker)
+            message = client_socket.recv(1024)
+            
+            if not message:
                 print("Connection closed by client")
                 break
-
-            # Accumulate the chunk of data
-            data += chunk
-
-            # Check if the message ends with the delimiter (e.g., '\r\n')
-            if b'\r\n' in data:
-                print(f"Complete message received: {data.decode()}")
-
-                # Process the message and send the response
-                response = handle_wialon_message(data.decode())
-                print(response)
-                client_socket.send(response.encode())
-
-                # Clear the buffer for future messages if needed
-                data = b''  # Reset the buffer for the next message
-                break  # Stop after processing the message
-
+            
+            print(f"Received data: {message}")
+            
+            # Handle the incoming Wialon IPS message
+            response = handle_wialon_message(message.decode())
+            
+            # Send an acknowledgment or response back to the device
+            client_socket.send(response.encode())
     except Exception as e:
         print(f"Error handling client: {e}")
     finally:
@@ -115,60 +136,3 @@ def start_server(host='0.0.0.0', port=2020):
 
 if __name__ == "__main__":
     start_server(port=2020)
-
-# import datetime
-# import socket
-# import threading
-
-
-# # Wialon Protocol Message Handler (example, parsing may vary depending on actual message format)
-# def handle_wialon_message(message):
-#     # Decode the message based on Wialon IPS protocol
-#     # Here, you would parse the binary or string data according to Wialon specs
-#     print(f"Received message: {message}")
-    
-#     # Simulate response message (you would craft a proper response here)
-#     response = "#AL#1\r\n"
-#     return response
-
-# Function to handle client connection
-# def handle_client_connection(client_socket):
-#     try:
-#         while True:
-#             # Receive the data from the client (GPS tracker)
-#             message = client_socket.recv(1024)
-            
-#             if not message:
-#                 print("Connection closed by client")
-#                 break
-            
-#             print(f"Received data: {message}")
-            
-#             # Handle the incoming Wialon IPS message
-#             response = handle_wialon_message(message.decode())
-            
-#             # Send an acknowledgment or response back to the device
-#             client_socket.send(response.encode())
-#     except Exception as e:
-#         print(f"Error handling client: {e}")
-#     finally:
-#         client_socket.close()
-
-# # Main server function
-# def start_server(host='0.0.0.0', port=2020):
-#     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#     server.bind((host, port))
-#     server.listen(5)  # Listen for up to 5 simultaneous connections
-#     print(f"Server started on {host}:{port}")
-    
-#     while True:
-#         client_socket, addr = server.accept()
-#         print(f"Accepted connection from {addr}")
-        
-#         # Handle client connection in a separate thread
-#         client_handler = threading.Thread(target=handle_client_connection, args=(client_socket,))
-#         client_handler.start()
-
-# if __name__ == "__main__":
-#     # Start the Wialon server
-#     start_server(port=2020)
