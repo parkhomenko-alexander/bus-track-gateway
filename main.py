@@ -54,6 +54,7 @@ def handle_wialon_message(message):
             exd = extract_data_fields(message)
             print(exd)
             response_body = "#AD#1\r\n"
+            exit()
             return response_body
         case _:
             print("ERROR")
