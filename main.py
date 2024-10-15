@@ -43,66 +43,84 @@ def extract_data_fields(message):
 
 
 def handle_wialon_message(message):
+    # response_body = ""
+    # print(message[:3])
+    # match message[:3]:
+    #     case "#L#":
+    #         print(f"Login message: {message}")
+    #         response_body = "#AL#1\r\n"
+    #         return response_body
+    #     case "#D#":
+    #         print(f"Data message: {message}")
+    #         exd = extract_data_fields(message)
+    #         print(exd)
+    #         response_body = "#AD#1\r\n"
+    #         return response_body
+    #     case _:
+    #         print("ERROR")
+    #         response_body = "#ERROR#1\r\n"
+
+    # return response_body
+
     response_body = ""
+
+    # Print the first 3 characters for debugging
     print(message[:3])
-    match message[:3]:
-        case "#L#":
-            print(f"Login message: {message}")
-            response_body = "#AL#1\r\n"
-            return response_body
-        case "#D#":
-            print(f"Data message: {message}")
-            exd = extract_data_fields(message)
-            print(exd)
-            response_body = "#AD#1\r\n"
-            return response_body
-        case _:
-            print("ERROR")
-            response_body = "#ERROR#1\r\n"
+
+    # Check if the message starts with "#L#" (Login message)
+    if message[:3] == "#L#":
+        print(f"Login message: {message}")
+        response_body = "#AL#1\r\n"
+        return response_body
+
+    # Check if the message starts with "#D#" (Data message)
+    elif message[:3] == "#D#":
+        print(f"Data message: {message}")
+        exd = extract_data_fields(message)
+        print(exd)
+        response_body = "#AD#1\r\n"
+        return response_body
+
+    # Default case for unknown messages
+    else:
+        print("ERROR")
+        response_body = "#ERROR#1\r\n"
 
     return response_body
 
-
-
 def handle_client_connection(client_socket):
     try:
-        buffer_size = 1024  # Buffer size for each chunk
-        data = b''  # Accumulator for incoming data
+        buffer_size = 1024
+        data = b''
 
         while True:
             print("Waiting to receive data...")
-
-            # Receive a chunk of data from the client
             chunk = client_socket.recv(buffer_size)
 
-            # Check if the chunk is empty, meaning the client closed the connection
+            # If the chunk is empty, the connection is closed
             if not chunk:
                 print("Connection closed by client")
                 break
 
-            # Accumulate the received chunk of data
+            # Accumulate the chunk of data
             data += chunk
 
-            # Check if the accumulated data contains the message terminator '\r\n'
+            # Check if the message ends with the delimiter (e.g., '\r\n')
             if b'\r\n' in data:
-                print(f"Complete message received: {data.decode(errors='ignore')}")
+                print(f"Complete message received: {data.decode()}")
 
-                # Process the message (handle Wialon message)
-                response = handle_wialon_message(data.decode(errors='ignore'))
-
-                # Send a response back to the client
+                # Process the message and send the response
+                response = handle_wialon_message(data.decode())
+                print(response)
                 client_socket.send(response.encode())
 
-                # Clear the buffer for the next message, if expecting more messages
-                data = b''  # Reset the buffer after processing the current message
-
-                # If you're only expecting one message per connection, break after processing
-                break
+                # Clear the buffer for future messages if needed
+                data = b''  # Reset the buffer for the next message
+                break  # Stop after processing the message
 
     except Exception as e:
         print(f"Error handling client: {e}")
     finally:
-        # Close the client connection
         client_socket.close()
     
     # try:
