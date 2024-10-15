@@ -1,6 +1,7 @@
 import datetime
 import socket
 import threading
+import traceback
 
 
 def extract_data_fields(message):
@@ -94,32 +95,12 @@ def handle_client_connection(client_socket):
 
     except Exception as e:
         print(f"Error handling client: {e}")
+        traceback.print_exc() 
     finally:
         client_socket.close()
-    
-    # try:
-    #     while True:
-    #         # Receive the data from the client (GPS tracker)
-    #         message = client_socket.recv(12000)
-            
-    #         if not message:
-    #             print("Connection closed by client")
-    #             break
-            
-    #         print(f"Received data: {message}")
-            
-    #         # Handle the incoming Wialon IPS message
-    #         response = handle_wialon_message(message.decode())
-            
-    #         # Send an acknowledgment or response back to the device
-    #         client_socket.send(response.encode())
-    # except Exception as e:
-    #     print(f"Error handling client: {e}")
-    # finally:
-    #     client_socket.close()
 
 
-# Main server function
+
 def start_server(host='0.0.0.0', port=2020):
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.bind((host, port))
