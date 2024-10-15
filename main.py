@@ -66,37 +66,43 @@ def handle_wialon_message(message):
 
 def handle_client_connection(client_socket):
     try:
-        buffer_size = 1024
-        data = b''
+        buffer_size = 1024  # Buffer size for each chunk
+        data = b''  # Accumulator for incoming data
 
         while True:
             print("Waiting to receive data...")
+
+            # Receive a chunk of data from the client
             chunk = client_socket.recv(buffer_size)
 
-            # If the chunk is empty, the connection is closed
+            # Check if the chunk is empty, meaning the client closed the connection
             if not chunk:
                 print("Connection closed by client")
                 break
 
-            # Accumulate the chunk of data
+            # Accumulate the received chunk of data
             data += chunk
 
-            # Check if the message ends with the delimiter (e.g., '\r\n')
+            # Check if the accumulated data contains the message terminator '\r\n'
             if b'\r\n' in data:
-                print(f"Complete message received: {data.decode()}")
+                print(f"Complete message received: {data.decode(errors='ignore')}")
 
-                # Process the message and send the response
-                response = handle_wialon_message(data.decode())
-                print(response)
+                # Process the message (handle Wialon message)
+                response = handle_wialon_message(data.decode(errors='ignore'))
+
+                # Send a response back to the client
                 client_socket.send(response.encode())
 
-                # Clear the buffer for future messages if needed
-                data = b''  # Reset the buffer for the next message
-                break  # Stop after processing the message
+                # Clear the buffer for the next message, if expecting more messages
+                data = b''  # Reset the buffer after processing the current message
+
+                # If you're only expecting one message per connection, break after processing
+                break
 
     except Exception as e:
         print(f"Error handling client: {e}")
     finally:
+        # Close the client connection
         client_socket.close()
     
     # try:
