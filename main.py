@@ -43,55 +43,29 @@ def extract_data_fields(message):
 
 
 def handle_wialon_message(message):
-    # response_body = ""
-    # print(message[:3])
-    # match message[:3]:
-    #     case "#L#":
-    #         print(f"Login message: {message}")
-    #         response_body = "#AL#1\r\n"
-    #         return response_body
-    #     case "#D#":
-    #         print(f"Data message: {message}")
-    #         exd = extract_data_fields(message)
-    #         print(exd)
-    #         response_body = "#AD#1\r\n"
-    #         return response_body
-    #     case _:
-    #         print("ERROR")
-    #         response_body = "#ERROR#1\r\n"
-
-    # return response_body
-
     response_body = ""
-
-    # Print the first 3 characters for debugging
-    print(message[:3])
-
-    # Check if the message starts with "#L#" (Login message)
-    if message[:3] == "#L#":
-        print(f"Login message: {message}")
-        response_body = "#AL#1\r\n"
-        return response_body
-
-    # Check if the message starts with "#D#" (Data message)
-    elif message[:3] == "#D#":
-        print(f"Data message: {message}")
-        exd = extract_data_fields(message)
-        print(exd)
-        response_body = "#AD#1\r\n"
-        return response_body
-
-    # Default case for unknown messages
-    else:
-        print("ERROR")
-        response_body = "#ERROR#1\r\n"
+    match message[:3]:
+        case "#L#":
+            print(f"Login message: {message}")
+            response_body = "#AL#1\r\n"
+            return response_body
+        case "#D#":
+            print(f"Data message: {message}")
+            exd = extract_data_fields(message)
+            print(exd)
+            response_body = "#AD#1\r\n"
+            return response_body
+        case _:
+            print("ERROR")
+            response_body = "#ERROR#1\r\n"
 
     return response_body
 
+    
 def handle_client_connection(client_socket):
     try:
         buffer_size = 1024
-        data = b''
+        data = ""
 
         while True:
             print("Waiting to receive data...")
