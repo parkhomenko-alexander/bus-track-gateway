@@ -54,8 +54,8 @@ def handle_wialon_message(message):
             response_body = "#AD#1\r\n"
             return response_body
         case _:
-            print("ERROR")
-            response_body = "#ERROR#1\r\n"
+            print(f"Data message: {message}")
+            response_body = "#AD#1\r\n"
 
     return response_body
 
