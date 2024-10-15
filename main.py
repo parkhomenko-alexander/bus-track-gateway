@@ -76,7 +76,7 @@ def handle_client_connection(client_socket):
                 data += chunk
                 print(len(chunk))
                 if "#L#" in data:
-                    r = handle_wialon_message(data)
+                    r = handle_wialon_message(data.decode())
                     client_socket.send(r.encode())
                     data = b''
                     continue
