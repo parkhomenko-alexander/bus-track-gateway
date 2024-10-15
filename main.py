@@ -118,7 +118,7 @@ def handle_wialon_message(message):
     print(f"Received message: {message}")
     
     # Simulate response message (you would craft a proper response here)
-    response = "#AL#1"
+    response = "#AL#1\r\n"
     return response
 
 # Function to handle client connection
