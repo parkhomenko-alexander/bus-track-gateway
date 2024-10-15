@@ -1,4 +1,3 @@
-import datetime
 import socket
 import threading
 
@@ -39,7 +38,6 @@ def extract_data_fields(message):
     except IndexError:
         print("Error: Message does not contain enough fields.")
         return None
-    
 
 
 def handle_wialon_message(message):
@@ -61,11 +59,11 @@ def handle_wialon_message(message):
 
     return response_body
 
-    
+
 def handle_client_connection(client_socket):
     try:
         buffer_size = 1024
-        data = ""
+        data = b""
 
         while True:
             print("Waiting to receive data...")
@@ -96,27 +94,6 @@ def handle_client_connection(client_socket):
         print(f"Error handling client: {e}")
     finally:
         client_socket.close()
-    
-    # try:
-    #     while True:
-    #         # Receive the data from the client (GPS tracker)
-    #         message = client_socket.recv(1024)
-            
-    #         if not message:
-    #             print("Connection closed by client")
-    #             break
-            
-    #         print(f"Received data: {message}")
-            
-    #         # Handle the incoming Wialon IPS message
-    #         response = handle_wialon_message(message.decode())
-            
-    #         # Send an acknowledgment or response back to the device
-    #         client_socket.send(response.encode())
-    # except Exception as e:
-    #     print(f"Error handling client: {e}")
-    # finally:
-    #     client_socket.close()
 
 
 # Main server function
