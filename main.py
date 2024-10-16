@@ -33,7 +33,7 @@ def extract_data_fields(message):
             if not (date and time):
                 d = None
             else:
-                d = convert_to_datetime(date[:3:], time)
+                d = convert_to_datetime(date[3:], time)
             
             lat1 = fields[2] if fields[2] != "NA" else None
             lat2 = fields[3] if fields[3] != "NA" else None
