@@ -1,9 +1,25 @@
-import datetime
 import socket
 import threading
 import traceback
+from datetime import datetime, timezone
 
 
+def convert_to_datetime(date_str, time_str):
+    try:
+        date_part = datetime.strptime(date_str, '%d%m%y').date()
+
+        time_part = datetime.strptime(time_str, '%H%M%S').time()
+
+        datetime_combined = datetime.combine(date_part, time_part)
+
+        datetime_combined = datetime_combined.replace(tzinfo=timezone.utc)
+
+        return datetime_combined
+
+    except ValueError as e:
+        print(f"Error parsing date/time: {e}")
+        return None
+    
 def extract_data_fields(message):
     message = message.strip()  
     # Split the message by semicolons
@@ -13,6 +29,12 @@ def extract_data_fields(message):
             fields = record.split(";")
             date = fields[0] if fields[0] != "NA" else None
             time = fields[1] if fields[1] != "NA" else None
+
+            if not (date and time):
+                d = None
+            else:
+                d = convert_to_datetime(date[:3:], time)
+            
             lat1 = fields[2] if fields[2] != "NA" else None
             lat2 = fields[3] if fields[3] != "NA" else None
             lon1 = fields[4] if fields[4] != "NA" else None
@@ -22,8 +44,7 @@ def extract_data_fields(message):
             
             # Return extracted values
             print({
-                "date": date,
-                "time": time,
+                "date": d,
                 "lat1": lat1,
                 "lat2": lat2,
                 "lon1": lon1,
